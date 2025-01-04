@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Store | Download the Best Apps</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f9fafb; /* Light background */
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Navbar */
+    header {
+      background-color: #2b3e56; /* Deep blue background */
+      color: white;
+      padding: 20px 30px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    header .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    header nav {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    header nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.1em;
+      padding: 10px;
+      position: relative;
+      transition: color 0.3s, transform 0.3s;
+    }
+
+    header nav a:hover {
+      color: #4CAF50;
+      transform: translateY(-3px);
+    }
+
+    header nav a::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background-color: #4CAF50;
+      left: 0;
+      bottom: -2px;
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    header nav a:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* Hamburger Icon */
+    .hamburger {
+      display: none;
+      cursor: pointer;
+      flex-direction: column;
+      justify-content: space-around;
+      height: 25px;
+      width: 30px;
+    }
+
+    .hamburger div {
+      width: 30px;
+      height: 4px;
+      background-color: white;
+      transition: 0.4s;
+    }
+
+    /* Hero Section */
+    .hero {
+      background-image: url('https://images.unsplash.com/photo-1506748686211-d3001b3c4049');
+      background-size: cover;
+      background-position: center;
+      min-height: 75vh;
+      color: white;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      padding: 20px;
+    }
+
+    .hero-content h1 {
+      font-size: 3em;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .hero-content p {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+    }
+
+    .hero-content .btn-primary {
+      margin-top: 20px;
+      padding: 15px 40px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .hero-content .btn-primary:hover {
+      background-color: #45a049;
+    }
+
+    /* Apps Section */
+    .apps {
+      padding: 60px 30px;
+      text-align: center;
+    }
+
+    .apps h2 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .apps .app-card {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      text-align: center;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .apps .app-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .apps .app-card h3 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .apps .app-card p {
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .apps .app-card .btn-download {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .apps .app-card .btn-download:hover {
+      background-color: #45a049;
+    }
+
+    /* About Section */
+    .about {
+      background-color: #f1f1f1;
+      padding: 60px 30px;
+      text-align: center;
+    }
+
+    .about h2 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    /* Contact Section */
+    .contact {
+      background-color: #2b3e56;
+      color: white;
+      padding: 60px 30px;
+      text-align: center;
+    }
+
+    .contact h3 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .contact .btn-contact {
+      padding: 12px 40px;
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 30px;
+      transition: background-color 0.3s;
+    }
+
+    .contact .btn-contact:hover {
+      background-color: #45a049;
+    }
+
+    /* Copyright Section */
+    .footer {
+      background-color: #2b3e56;
+      color: white;
+      padding: 15px 30px;
+      text-align: center;
+      font-size: 0.9em;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      header nav {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+      }
+
+      header nav.active {
+        display: flex;
+      }
+
+      .hamburger {
+        display: block;
+        cursor: pointer;
+      }
+
+      .apps .app-card {
+        margin: 15px 0;
+      }
+
+      .about, .contact {
+        padding: 40px 20px;
+      }
+
+      .btn-primary, .btn-contact {
+        padding: 10px 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-content h1 {
+        font-size: 2em;
+      }
+
+      .hero-content p {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <div class="logo">AppStore</div>
+    <nav>
+      <a href="#apps">Apps</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Discover the Best Apps</h1>
+      <p>Explore, browse, and download top-rated apps for productivity, entertainment, and more.</p>
+      <a href="#apps" class="btn-primary">Explore Now</a>
+    </div>
+  </section>
+
+  <!-- Apps Section -->
+  <section id="apps" class="apps">
+    <h2>Featured Apps</h2>
+    <div class="app-card">
+      <h3>App Name 1</h3>
+      <p>A great app for productivity and enhancing your workflow.</p>
+      <a href="#" class="btn-download">Download Now</a>
+    </div>
+    <div class="app-card">
+      <h3>App Name 2</h3>
+      <p>Enhance your entertainment experience with this amazing app.</p>
+      <a href="#" class="btn-download">Download Now</a>
+    </div>
+    <div class="app-card">
+      <h3>App Name 3</h3>
+      <p>A powerful app to manage your finances and track your spending.</p>
+      <a href="#" class="btn-download">Download Now</a>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="about">
+    <h2>About Us</h2>
+    <p>We provide a wide range of apps that suit every need. Our goal is to offer the best apps for your phone, ensuring security and ease of use.</p>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contact">
+    <h3>Join Us Today!</h3>
+    <p>Start exploring and downloading the best apps for your device. Our collection is always growing!</p>
+    <a href="https://t.me/PremiumAppAccount" class="btn-contact">Join on Telegram</a>
+  </section>
+
+  <!-- Copyright Section -->
+  <footer class="footer">
+    <p>© 2025 AppStore. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // JavaScript to Toggle Navbar on Mobile
+    function toggleMenu() {
+      const nav = document.querySelector('header nav');
+      const hamburger = document.querySelector('.hamburger');
+      nav.classList.toggle('active');
+      hamburger.classList.toggle('active');
+    }
+  </script>
+
+</body>
+</html>
